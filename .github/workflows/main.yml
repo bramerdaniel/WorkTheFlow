@@ -31,7 +31,7 @@ jobs:
         echo SomeText > MyPackage.txt
 
     - name: upload artifacts
-      #if: github.ref == 'refs/heads/master'
+      if: ${{github.ref == 'refs/heads/master'}}
       uses: actions/upload-artifact@v3.0.0
       with:
         name: nugetPackage
@@ -41,10 +41,9 @@ jobs:
   publish:
     needs: build
     runs-on: windows-latest
-    #if: github.ref == 'refs/heads/master'
+    if: ${{github.ref == 'refs/heads/master'}}
     steps:
     - name: download nuget
-      if: github.ref == 'refs/heads/master'
       uses: actions/download-artifact@v3.0.0
       with:
         name: nugetPackage
