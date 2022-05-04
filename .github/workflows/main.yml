@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: branch ${{ github.ref }}
       if: github.ref == 'refs/heads/master'  
-      run: ${{ github.ref }}
+      run: echo ${{ github.ref }}
 
     - name: checkout branch
       uses: actions/checkout@v3
