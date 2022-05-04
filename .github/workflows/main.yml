@@ -2,35 +2,33 @@ name: Build and Test
 
 on:
   push:
-    branches-ignore: [ master ]
-    # paths-ignore:
-    #  - '**.yml'
   pull_request:
-    branches-ignore: [ master ]
   workflow_dispatch:
 
-env:
-  SOLUTION_DIRECTORY : src
-  SOLUTION_PATH : src/FluentSetups.sln
-  
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: check branch
+    - name: branch ${{ github.ref }}
       if: github.ref == 'refs/heads/master'  
-      run: echo github.ref
+      run: ${{ github.ref }}
 
     - name: checkout branch
       uses: actions/checkout@v3
+      
+    - name: build
+      run: | 
+        mkdir Release
+        cd Release
+        echo SomeText > MyPackage.txt
 
     - name: upload artifacts
       #if: github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v3.0.0
       with:
         name: nugetPackage
-        path: src\Release\*.nupkg
+        path: Release\*.txt
         retention-days: 1
 
   publish:
