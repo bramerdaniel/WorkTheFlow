@@ -1,36 +1,72 @@
-# This is a basic workflow to help you get started with Actions
+name: Build and Test
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches-ignore: [ master ]
+    # paths-ignore:
+    #  - '**.yml'
   pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches-ignore: [ master ]
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  SOLUTION_DIRECTORY : src
+  SOLUTION_PATH : src/FluentSetups.sln
+  
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+    - name: check branch
+      if: github.ref != 'refs/heads/master'  
+      run: echo we are not on master
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: checkout branch
+      uses: actions/checkout@v3
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.6
+      with:
+        nuget-version: latest
+        nuget-api-key: ${{secrets.NUGET_API_KEY}}
+    
+    - name: restore NuGet packages
+      run: nuget restore ${{ env.SOLUTION_PATH }}
+    
+    - name: setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: build solution
+      run: msbuild ${{ env.SOLUTION_PATH }} -property:Configuration=Release
+   
+    - name: setup VSTest.console.exe
+      uses: darenm/Setup-VSTest@v1
+      
+      #TODO create matrix for all platforms
+    - name: run unit tests
+      run: vstest.console.exe ${{ env.SOLUTION_DIRECTORY }}\Release\net6.0\FluentSetups.UnitTests.dll
+
+    - name: upload artifacts
+      #if: github.ref == 'refs/heads/master'
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: nugetPackage
+        path: src\Release\*.nupkg
+        retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: windows-latest
+    #if: github.ref == 'refs/heads/master'
+    steps:
+    - name: download nuget
+      if: github.ref == 'refs/heads/master'
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: nugetPackage
+        path: downloads
+        
+    - name: show download
+      run: dir downloads
+  
