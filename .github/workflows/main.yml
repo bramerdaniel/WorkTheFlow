@@ -16,17 +16,13 @@ jobs:
 
     - name: checkout branch
       uses: actions/checkout@v3
-      
-    - name: Git Version
-      # You may pin to the exact commit or the version.
-      # uses: codacy/git-version@fa06788276d7492a2af01662649696d249ecf4cb
-      uses: codacy/git-version@2.4.0
-      with:
-        dev-branch: develop
-        # The prefix to use in the version
-        #prefix: # optional
-        # The paths to be used to calculate changes (comma-separated)
-        #log-paths: # optional, default is ./
+    
+    - id: get_version
+      uses: battila7/get-version-action@v2
+
+    - run: echo ${{ steps.get_version.outputs.version }}
+
+    - run: echo ${{ steps.get_version.outputs.version-without-v }}
       
     - name: build
       run: | 
