@@ -30,35 +30,18 @@ jobs:
         path: Release
         key: ${{ github.run_number }}
         
-        
-    #- id: get_version
-    #  uses: battila7/get-version-action@v2.2.1
-
-    #- run: echo ${{ steps.get_version.outputs.version }}
-    #- run: echo ${{ steps.get_version.outputs.version-without-v }}
-    #- run: echo ${{ steps.get_version.outputs.is-semver }}
-      
-
-
-    - name: upload artifacts
-      if: ${{github.ref == 'refs/heads/master'}}
-      uses: actions/upload-artifact@v3.0.0
-      with:
-        name: nugetPackage
-        path: Release\*.txt
-        retention-days: 1
 
   publish:
     needs: build
     runs-on: windows-latest
-    if: ${{github.ref == 'refs/heads/master'}}
     steps:
-    - name: download nuget
-      uses: actions/download-artifact@v3.0.0
+    - name: Activate caching
+      id: cache
+      uses: actions/cache@v2
       with:
-        name: nugetPackage
-        path: downloads
+        path: Cache
+        key: ${{ github.run_number }}
         
-    - name: show download
-      run: dir downloads
+    - name: show cache
+      run: dir Cache
   
