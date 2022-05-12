@@ -25,7 +25,9 @@ jobs:
         
 
     - name: dir Release
-      run: dir Release
+      run: | 
+        dir 
+        dir Release
 
     - name: Activate caching
       id: cache
