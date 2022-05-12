@@ -16,13 +16,24 @@ jobs:
 
     - name: checkout branch
       uses: actions/checkout@v3
-    
-    - id: get_version
-      uses: battila7/get-version-action@v2.2.1
 
-    - run: echo ${{ steps.get_version.outputs.version }}
-    - run: echo ${{ steps.get_version.outputs.version-without-v }}
-    - run: echo ${{ steps.get_version.outputs.is-semver }}
+    - name: Unique Name Generator Action
+        # You may pin to the exact commit or the version.
+        # uses: TGPSKI/name-generator-node-action@5c1c97cdae4ef40d21eb05f1a46ead10ac61037b
+      uses: TGPSKI/name-generator-node-action@v2
+      with:
+        # How many words in the name
+        length: 50
+        # Name output case style
+        #style: # default is lowerCase
+        
+        
+    #- id: get_version
+    #  uses: battila7/get-version-action@v2.2.1
+
+    #- run: echo ${{ steps.get_version.outputs.version }}
+    #- run: echo ${{ steps.get_version.outputs.version-without-v }}
+    #- run: echo ${{ steps.get_version.outputs.is-semver }}
       
     - name: build
       run: | 
