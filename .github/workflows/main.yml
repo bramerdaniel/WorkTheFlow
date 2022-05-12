@@ -23,7 +23,9 @@ jobs:
         cd Release
         echo SomeText > MyPackage.txt
         
-
+    - name: dir
+      run: dir 
+      
     - name: dir Release
       run: | 
         dir 
