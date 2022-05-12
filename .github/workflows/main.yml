@@ -23,7 +23,7 @@ jobs:
       uses: TGPSKI/name-generator-node-action@v2
       with:
         # How many words in the name
-        length: 50
+        length: 4
         # Name output case style
         #style: # default is lowerCase
         
