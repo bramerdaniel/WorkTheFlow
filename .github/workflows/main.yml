@@ -49,7 +49,10 @@ jobs:
       with:
         path: Cache
         key: ${{ github.run_number }}
-        
+
+    - name: dir
+      run: dir 
+      
     - name: show cache
       run: dir Cache
   
