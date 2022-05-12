@@ -16,16 +16,19 @@ jobs:
 
     - name: checkout branch
       uses: actions/checkout@v3
+      
+    - name: build
+      run: | 
+        mkdir Release
+        cd Release
+        echo SomeText > MyPackage.txt
 
-    - name: Unique Name Generator Action
-        # You may pin to the exact commit or the version.
-        # uses: TGPSKI/name-generator-node-action@5c1c97cdae4ef40d21eb05f1a46ead10ac61037b
-      uses: TGPSKI/name-generator-node-action@v2
+    - name: Activate caching
+      id: cache
+      uses: actions/cache@v2
       with:
-        # How many words in the name
-        length: 4
-        # Name output case style
-        #style: # default is lowerCase
+        path: Release
+        key: ${{ github.run_number }}
         
         
     #- id: get_version
@@ -35,11 +38,7 @@ jobs:
     #- run: echo ${{ steps.get_version.outputs.version-without-v }}
     #- run: echo ${{ steps.get_version.outputs.is-semver }}
       
-    - name: build
-      run: | 
-        mkdir Release
-        cd Release
-        echo SomeText > MyPackage.txt
+
 
     - name: upload artifacts
       if: ${{github.ref == 'refs/heads/master'}}
