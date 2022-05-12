@@ -22,6 +22,10 @@ jobs:
         mkdir Release
         cd Release
         echo SomeText > MyPackage.txt
+        
+
+    - name: dir Release
+      run: dir Release
 
     - name: Activate caching
       id: cache
