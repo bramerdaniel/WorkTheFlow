@@ -27,7 +27,7 @@ jobs:
       id: cache
       uses: actions/cache@v2
       with:
-        path: Release
+        path: /Release
         key: ${{ github.run_number }}
         
 
