@@ -21,14 +21,14 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
       with:
         # Version of Visual Studio to search; defaults to latest if not specified
-        vs-version: '[17.0,18.0)'
+        vs-version: '[17.0,17.1)'
         # The preferred processor architecture of MSBuild. Can be either "x86" or "x64". "x64" is only available from Visual Studio version 17.0 and later.
         msbuild-architecture: x64
 
-    - name: mbuild version
+    - name: mbuild -version
       run: msbuild -version
       
-    - name: mbuild version
+    - name: mbuild -restore
       run: msbuild UTest/UTest.sln -restore       
 
     - name: build solution
