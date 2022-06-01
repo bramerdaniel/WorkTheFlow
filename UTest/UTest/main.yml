@@ -1,0 +1,37 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: branch ${{ github.ref }}
+      if: github.ref == 'refs/heads/master'  
+      run: echo ${{ github.ref }}
+
+    - name: checkout branch
+      uses: actions/checkout@v3
+      
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        # Version of Visual Studio to search; defaults to latest if not specified
+        vs-version: '[17.0,17.1)'
+        # The preferred processor architecture of MSBuild. Can be either "x86" or "x64". "x64" is only available from Visual Studio version 17.0 and later.
+        msbuild-architecture: x64
+
+    - name: mbuild version
+      run: msbuild -version
+      
+    - name: mbuild -restore
+      run: msbuild UTest/UTest.sln -restore       
+
+    - name: build solution
+      run: msbuild UTest/UTest.sln -property:Configuration=Release
+        
+  
