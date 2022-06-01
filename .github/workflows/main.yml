@@ -25,7 +25,10 @@ jobs:
         # The preferred processor architecture of MSBuild. Can be either "x86" or "x64". "x64" is only available from Visual Studio version 17.0 and later.
         msbuild-architecture: x64
 
+    - name: mbuild version
+      run: msbuild -version
+
     - name: build solution
-      run: msbuild ${{ env.SOLUTION_PATH }} -property:Configuration=Release
+      run: msbuild UTest/UTest.sln -property:Configuration=Release
         
   
