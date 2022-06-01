@@ -27,6 +27,9 @@ jobs:
 
     - name: mbuild version
       run: msbuild -version
+      
+    - name: mbuild version
+      run: msbuild UTest/UTest.sln -restore       
 
     - name: build solution
       run: msbuild UTest/UTest.sln -property:Configuration=Release
