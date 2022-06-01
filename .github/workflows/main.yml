@@ -17,42 +17,15 @@ jobs:
     - name: checkout branch
       uses: actions/checkout@v3
       
-    - name: build
-      run: | 
-        mkdir Release
-        cd Release
-        echo SomeText > MyPackage.txt
-        
-    - name: dir
-      run: dir 
-      
-    - name: dir Release
-      run: | 
-        dir 
-        dir Release
-
-    - name: Activate caching
-      id: cache
-      uses: actions/cache@v3
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
       with:
-        path: Release/*.txt
-        key: ${{ github.run_number }}
+        # Version of Visual Studio to search; defaults to latest if not specified
+        vs-version: '[17.0,18.0)'
+        # The preferred processor architecture of MSBuild. Can be either "x86" or "x64". "x64" is only available from Visual Studio version 17.0 and later.
+        msbuild-architecture: x64
+
+    - name: build solution
+      run: msbuild ${{ env.SOLUTION_PATH }} -property:Configuration=Release
         
-
-  publish:
-    needs: build
-    runs-on: windows-latest
-    steps:
-    - name: Activate caching
-      id: cache
-      uses: actions/cache@v3
-      with:
-        path: Cache
-        key: ${{ github.run_number }}
-
-    - name: dir
-      run: dir 
-      
-    - name: show cache
-      run: dir Cache
   
