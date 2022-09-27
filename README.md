@@ -2,4 +2,4 @@
 
 This repo is just for testing the github actions workflows
 
-theme: minima
+theme: Dinky
